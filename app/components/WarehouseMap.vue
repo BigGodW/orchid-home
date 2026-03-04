@@ -26,22 +26,22 @@
     </div>
 
     <!-- 仓库网格（核心：I/J列分割 + 每行间距 + 边框修复） -->
-    <div class="inline-block border border-gray-200 overflow-x-auto">
+    <div class="inline-block border border-gray-200 overflow-auto">
       <!-- 第一行：列标题（A-P）+ 左上角占位 -->
       <div class="flex flex-shrink-0">
         <!-- 行号占位 -->
-        <div class="w-8 sm:w-10 h-8 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm"></div>
+        <div class="w-6 sm:w-10 h-6 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm"></div>
         
         <!-- 列标题A-I -->
-        <div v-for="col in 9" :key="`col-${col}`" class="w-8 sm:w-10 h-8 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+        <div v-for="col in 9" :key="`col-${col}`" class="w-6 sm:w-10 h-6 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
           {{ String.fromCharCode(64 + col) }}
         </div>
         
         <!-- I/J列之间的分割边距（修复边框） -->
-        <div class="w-2 sm:w-3 h-8 sm:h-10 border-b border-r"></div>
+        <div class="w-2 sm:w-3 h-6 sm:h-10 border-b border-r"></div>
         
-        <!-- 列标题J-P -->
-        <div v-for="col in [10,11,12,13,14,15,16]" :key="`col-${col}`" class="w-8 sm:w-10 h-8 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+        <!-- 列标题J-N -->
+        <div v-for="col in [10,11,12,13,14]" :key="`col-${col}`" class="w-6 sm:w-10 h-6 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
           {{ String.fromCharCode(64 + col) }}
         </div>
       </div>
@@ -49,7 +49,7 @@
       <!-- 后续行：行号 + 16个区块单元格（增加每行间距） -->
       <div v-for="row in 28" :key="`row-${row}`" class="flex flex-shrink-0 mb-1">
         <!-- 行号 -->
-        <div class="w-8 sm:w-10 h-8 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+        <div class="w-6 sm:w-10 h-6 sm:h-10 border-b border-r flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
           {{ row }}
         </div>
         
@@ -59,7 +59,7 @@
           :key="`${row}-${col}`"
           @click="handleBlockClick(row, col)"
           :class="[
-            'w-8 sm:w-10 h-8 sm:h-10 border-b border-r cursor-pointer transition-all flex items-center justify-center text-xs',
+            'w-6 sm:w-10 h-6 sm:h-10 border cursor-pointer transition-all flex items-center justify-center text-xs',
             getBlockStatus(row, col).isRestricted
               ? 'bg-gray-300 cursor-not-allowed'
               : getBlockStatus(row, col).isSearched
@@ -77,11 +77,11 @@
         
         <!-- 区块单元格J-P（修复J列边框） -->
         <div
-          v-for="col in [10,11,12,13,14,15,16]"
+          v-for="col in [10,11,12,13,14]"
           :key="`${row}-${col}`"
           @click="handleBlockClick(row, col)"
           :class="[
-            'w-8 sm:w-10 h-8 sm:h-10 border-b border-r cursor-pointer transition-all flex items-center justify-center text-xs',
+            'w-6 sm:w-10 h-6 sm:h-10 border cursor-pointer transition-all flex items-center justify-center text-xs',
             getBlockStatus(row, col).isRestricted
               ? 'bg-gray-300 cursor-not-allowed'
               : getBlockStatus(row, col).isSearched
