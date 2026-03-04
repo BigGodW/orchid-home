@@ -73,3 +73,10 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+》# .env
+# 数据库配置
+DB_HOST=47.109.179.80
+DB_USER=warehouse_db
+DB_PASSWORD=JX6hKmdxQnFQPTcS
+DB_NAME=warehouse_db
