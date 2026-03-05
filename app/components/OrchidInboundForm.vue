@@ -68,7 +68,7 @@
             <input
               type="text"
               v-model="formData.speciesName"
-              placeholder="例如：春兰、墨兰、建兰"
+              placeholder="例如：春剑 西部荷王"
               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               required
               :disabled="isRestrictedBlock"

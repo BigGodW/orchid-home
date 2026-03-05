@@ -25,7 +25,7 @@
 <div v-if="searchedBlocks.length > 0">
         <div class=" pb-4">
           <table class="w-full bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden table-auto">
-            <thead class="bg-blue-100 border-b border-gray-300">
+            <thead class="bg-blue-100 border border-gray-300">
               <tr>
                 <th class="py-1 px-4">序号</th>
                 <th class="py-1 px-4 text-left">品种名称</th>
@@ -35,7 +35,7 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in searchedBlocks" :key="item.block_id + '-' + item.row_num + '-' + item.col_num"
-                class="border-b hover:bg-gray-100 transition-colors">
+                class="border border-black hover:bg-gray-100 transition-colors">
                 <td class="py-1 px-1 text-center">{{ index + 1 }}</td>
                 <td class="py-1 px-1">{{ item.species_name }}</td>
                 <td class="py-1 px-4 text-right font-mono text-sm">{{ item.block_code }}</td>
@@ -46,42 +46,44 @@
         </div>
       </div>
     <!-- 仓库网格（核心：I/J列分割 + 每行间距 + 边框修复） -->
-    <div class=" inline-block  border border-gray-200 overflow-auto">
+    <div class=" inline-block  border border-black overflow-auto">
+      <!-- 温棚区 -->
+       <div class="bg-blue-200 border border-black text-center h-24 leading-[4] text-2xl">温棚区</div>
       <!-- 第一行：列标题（A-P）+ 左上角占位 -->
-      <div class="flex flex-shrink-0 border">
+      <div class="flex flex-shrink-0 border border-black">
         <!-- 行号占位 -->
         <div
-          class="w-6 sm:w-10 h-6 sm:h-10 border  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+          class="w-6 sm:w-10 h-6 sm:h-10 border border-black  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
         </div>
 
         <!-- 列标题A-I -->
         <div v-for="col in 9" :key="`col-${col}`"
-          class="w-6 sm:w-10 h-6 sm:h-10 border  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+          class="w-6 sm:w-10 h-6 sm:h-10 border border-black  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
           {{ String.fromCharCode(64 + col) }}
         </div>
 
         <!-- I/J列之间的分割边距（修复边框） -->
-        <div class="w-2 sm:w-3 h-6 sm:h-10 "></div>
+        <div class="w-2 sm:w-3 h-6 sm:h-10 bg-black"></div>
 
         <!-- 列标题J-N -->
         <div v-for="col in [10, 11, 12, 13, 14]" :key="`col-${col}`"
-          class="w-6 sm:w-10 h-6 sm:h-10 border  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+          class="w-6 sm:w-10 h-6 sm:h-10 border border-black  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
           {{ String.fromCharCode(64 + col) }}
         </div>
       </div>
 
       <!-- 后续行：行号 + 16个区块单元格（增加每行间距） -->
-      <div v-for="row in 28" :key="`row-${row}`" class="flex flex-shrink-0 border">
+      <div v-for="row in 28" :key="`row-${row}`" class="flex flex-shrink-0 border border-black">
         <!-- 行号 -->
-        <div class="w-6 sm:w-10 h-6 sm:h-10  flex items-center justify-center font-bold bg-gray-50 text-xs sm:text-sm">
+        <div class="w-6 sm:w-10 h-6 sm:h-10  flex items-center justify-center font-bold bg-gray-50 border border-black text-xs sm:text-sm">
           {{ row }}
         </div>
 
         <!-- 区块单元格A-I -->
         <div v-for="col in 9" :key="`${row}-${col}`" @click="handleBlockClick(row, col)" :class="[
-          'w-6 sm:w-10 h-6 sm:h-10 border cursor-pointer transition-all flex items-center justify-center text-xs',
+          'w-6 sm:w-10 h-6 sm:h-10 border border-black cursor-pointer transition-all flex items-center justify-center text-xs',
           getBlockStatus(row, col).isRestricted
-            ? 'bg-gray-300 cursor-not-allowed'
+            ? 'bg-yellow-300 cursor-not-allowed'
             : getBlockStatus(row, col).isSearched
               ? 'bg-yellow-400 hover:bg-yellow-500'
               : getBlockStatus(row, col).hasOrchids
@@ -92,13 +94,13 @@
         </div>
 
         <!-- I/J列之间的分割边距（和标题行对应，修复边框） -->
-        <div class="w-2 sm:w-3 h-6 sm:h-10 "></div>
+        <div class="w-2 sm:w-3 h-6 sm:h-10 bg-black "></div>
 
         <!-- 区块单元格J-P（修复J列边框） -->
         <div v-for="col in [10, 11, 12, 13, 14]" :key="`${row}-${col}`" @click="handleBlockClick(row, col)" :class="[
-          'w-6 sm:w-10 h-6 sm:h-10 border cursor-pointer transition-all flex items-center justify-center text-xs',
+          'w-6 sm:w-10 h-6 sm:h-10 border border-black cursor-pointer transition-all flex items-center justify-center text-xs',
           getBlockStatus(row, col).isRestricted
-            ? 'bg-gray-300 cursor-not-allowed'
+            ? 'bg-red-300 cursor-not-allowed'
             : getBlockStatus(row, col).isSearched
               ? 'bg-yellow-400 hover:bg-yellow-500'
               : getBlockStatus(row, col).hasOrchids

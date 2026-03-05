@@ -55,7 +55,6 @@ export const releaseConnection = (connection) => {
   if (connection) {
     try {
       connection.release() // 连接池模式释放（不是关闭）
-      console.log('🔄 数据库连接已释放回连接池')
     } catch (error) {
       console.error('释放数据库连接失败：', error)
     }
@@ -69,6 +68,5 @@ export const closePool = async () => {
   if (connectionPool) {
     await connectionPool.end()
     connectionPool = null
-    console.log('🛑 数据库连接池已关闭')
   }
 }
