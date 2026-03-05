@@ -17,9 +17,9 @@
     </div>
 
     <!-- 全局统计卡片 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-3 gap-4 mb-6">
       <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
-        <h3 class="text-sm font-medium text-gray-500">总库存（盆）</h3>
+        <h3 class="text-sm font-medium text-gray-500">总库存/盆</h3>
         <p class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">{{ totalQuantity }}</p>
       </div>
       <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
@@ -38,26 +38,26 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">兰花品种</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总数量（盆）</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分布区块数</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">主要存放区域</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+              <th class="px-2 py-2  text-xs font-medium text-gray-500 uppercase tracking-wider">兰花品种</th>
+              <th class="px-2 py-2  text-xs font-medium text-gray-500 uppercase tracking-wider">总数量（盆）</th>
+              <!-- <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分区数</th> -->
+              <th class="px-2 py-2  text-xs font-medium text-gray-500 uppercase tracking-wider">存放位置</th>
+              <th class="px-2 py-2  text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <!-- 筛选后的品种列表 -->
             <tr v-for="item in filteredSpeciesList" :key="item.species_id" class="hover:bg-gray-50">
-              <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+              <td class="px-2 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                 {{ item.species_name }}
               </td>
-              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+              <td class=" whitespace-nowrap text-sm text-gray-500">
                 {{ item.total_quantity }}
               </td>
-              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+              <!-- <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                 {{ item.block_count }}
-              </td>
-              <td class="px-4 py-3 whitespace-normal text-sm text-gray-500">
+              </td> -->
+              <td class=" whitespace-normal text-sm text-gray-500">
                 <div class="flex flex-wrap gap-1">
                   <span v-for="block in item.main_blocks" :key="block" class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
                     {{ block }}

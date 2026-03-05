@@ -1,5 +1,5 @@
 // server/api/search.get.js
-import { useDatabase } from '~/composables/useDatabase.js'
+import { useDatabase,releaseConnection  } from '~/composables/useDatabase.js'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -28,12 +28,15 @@ export default defineEventHandler(async (event) => {
       JOIN warehouse_block b ON i.block_id = b.id
       WHERE s.species_name LIKE ?
     `, [`%${keyword}%`])
-
+    releaseConnection(db) // 查询完成后释放连接回连接池
     return {
       success: true,
       data: results
     }
   } catch (error) {
+    if(db){
+      releaseConnection(db) // 确保在发生错误时也释放连接
+    }
     console.error('搜索接口错误：', error)
     return {
       success: false,

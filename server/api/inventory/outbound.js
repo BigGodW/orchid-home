@@ -1,5 +1,5 @@
 // server/api/inventory/outbound.js
-import { useDatabase } from '~/composables/useDatabase.js'
+import { useDatabase, releaseConnection } from '~/composables/useDatabase.js'
 
 export default defineEventHandler(async (event) => {
   let db = null
@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
 
     if (inventory.length === 0) {
       await db.rollback()
+      releaseConnection(db) // 修复：库存不存在时释放连接
       return {
         success: false,
         message: '该区块暂无此品种的兰花库存'
@@ -40,6 +41,7 @@ export default defineEventHandler(async (event) => {
     const currentQty = inventory[0].quantity
     if (quantity > currentQty) {
       await db.rollback()
+      releaseConnection(db) // 出库数量超限释放连接
       return {
         success: false,
         message: `出库数量超过当前库存（当前：${currentQty} 盆）`
@@ -64,44 +66,35 @@ export default defineEventHandler(async (event) => {
       `, [newQty, blockId, speciesId])
     }
 
-    // 3. 修复：日志数量改为正数，通过remark区分出库（解决数值越界）
+    // 3. 记录出库日志（正数+备注区分）
     await db.execute(`
       INSERT INTO inbound_log (block_id, species_id, inbound_quantity, operator, remark, operation_time)
       VALUES (?, ?, ?, 'system', '兰花出库', CURRENT_TIMESTAMP)
-    `, [blockId, speciesId, quantity]) // 改为正数，不再用负数
+    `, [blockId, speciesId, quantity])
 
     // 提交事务
     await db.commit()
-
+    releaseConnection(db) // 事务成功提交后释放连接
     return {
       success: true,
       message: `成功出库 ${quantity} 盆，剩余库存 ${newQty} 盆`
     }
 
   } catch (error) {
-    // 事务回滚（仅当db初始化成功）
+    // 事务回滚 + 释放连接
     if (db) {
       try {
         await db.rollback()
       } catch (rollbackError) {
         console.error('事务回滚失败：', rollbackError)
       }
+      releaseConnection(db) // 异常时必须释放连接！
     }
     
     console.error('出库接口执行失败：', error)
     return {
       success: false,
       message: '出库失败：' + error.message
-    }
-  } finally {
-    // 修复：移除release方法（mysql2的PromiseConnection无此方法）
-    // 如需关闭连接，改用end()（仅在单连接模式下使用）
-    if (db) {
-      try {
-        // await db.end() // 仅当你是单连接模式时启用，连接池模式请注释
-      } catch (endError) {
-        console.error('关闭数据库连接失败：', endError)
-      }
     }
   }
 })

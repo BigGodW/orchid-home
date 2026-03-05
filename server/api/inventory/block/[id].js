@@ -1,5 +1,5 @@
 // server/api/inventory/block/[id].js
-import { useDatabase } from '~/composables/useDatabase.js'
+import { useDatabase,releaseConnection  } from '~/composables/useDatabase.js'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -26,12 +26,15 @@ export default defineEventHandler(async (event) => {
       WHERE i.block_id = ?
       ORDER BY s.species_name
     `, [blockId])
-
+      releaseConnection(db) // 查询完成后释放连接回连接池
     return {
       success: true,
       data: inventory
     }
   } catch (error) {
+    if(db){
+      releaseConnection(db) // 确保在发生错误时也释放连接
+    }
     console.error('查询区块库存失败：', error)
     return {
       success: false,

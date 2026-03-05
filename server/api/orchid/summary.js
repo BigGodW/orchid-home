@@ -1,5 +1,5 @@
 // server/api/orchid/summary.js
-import { useDatabase } from '~/composables/useDatabase.js'
+import { useDatabase,releaseConnection  } from '~/composables/useDatabase.js'
 
 export default defineEventHandler(async (event) => {
   let db = null
@@ -70,6 +70,7 @@ export default defineEventHandler(async (event) => {
     )
 
     // 组装最终返回数据
+    releaseConnection(db) // 查询完成后释放连接回连接池
     return {
       success: true,
       data: {
@@ -83,6 +84,9 @@ export default defineEventHandler(async (event) => {
     }
 
   } catch (error) {
+    if(db){
+      releaseConnection(db) // 确保在发生错误时也释放连接
+    }
     console.error('兰花汇总API执行失败：', error)
     return {
       success: false,

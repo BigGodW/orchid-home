@@ -1,5 +1,5 @@
 // server/api/inventory/edit.js
-import { useDatabase } from '~/composables/useDatabase.js'
+import { useDatabase,releaseConnection  } from '~/composables/useDatabase.js'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -76,13 +76,17 @@ export default defineEventHandler(async (event) => {
 
     // 提交事务
     await db.commit()
-
+    releaseConnection(db) // 事务提交后释放连接回连接池
     return {
       success: true,
       message: `成功将数量修改为 ${quantity} 盆`
     }
   } catch (error) {
+    
     await db.rollback()
+    if(db){
+      releaseConnection(db) // 确保在发生错误时也释放连接
+    }
     console.error('编辑数量失败：', error)
     return {
       success: false,
